@@ -142,6 +142,26 @@ $enum = $converter->castValue(MyEnum::class, 'VALUE1');
 echo $enum->getValue(); // VALUE1
 ```
 
+### `EntityByKeyConverter`
+
+This converter handles Doctrine entities by their key properties.
+
+```php
+$entityManager = // get your EntityManager instance
+$converter = new \Instapro\SchemaConverter\EntityByKeyConverter(
+    $entityManager,
+    'postal_code',
+    MyPostalCodeEntity::class,
+    'postalCode'
+);
+
+echo json_encode($converter->toSchema(MyPostalCodeEntity::class)->toArray()); // {"type": "postal_code"}
+echo PHP_EOL;
+
+$entity = $converter->castValue(MyPostalCodeEntity::class, '1017BS');
+echo $entity->postalCode; // 1017BS
+```
+
 ### `CompositeConverter`
 
 There are several types of schemas that can be generated. For convenience, the library provides a `CompositeConverter` that can be used to convert multiple types of schemas.

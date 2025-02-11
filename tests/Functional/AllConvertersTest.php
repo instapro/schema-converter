@@ -7,11 +7,13 @@ namespace Instapro\SchemaConverter\Test\Functional;
 use DateTime;
 use Instapro\SchemaConverter\CompositeConverter;
 use Instapro\SchemaConverter\DateTimeConverter;
+use Instapro\SchemaConverter\EntityByKeyConverter;
 use Instapro\SchemaConverter\EntityConverter;
 use Instapro\SchemaConverter\EnumConverter;
 use Instapro\SchemaConverter\ObjectConverter;
 use Instapro\SchemaConverter\PrimitiveConverter;
 use Instapro\SchemaConverter\Test\Fixtures\Entities\RealEntity;
+use Instapro\SchemaConverter\Test\Fixtures\Entities\RealSecondEntity;
 use Instapro\SchemaConverter\Test\Fixtures\Enums\Backed;
 use Instapro\SchemaConverter\Test\Fixtures\Enums\Basic;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\Level1;
@@ -200,16 +202,20 @@ final class AllConvertersTest extends TestCase
                 Backed::class,
                 ['type' => 'enum', 'allowedValues' => ['First', 'Second', 'Third']],
             ],
+            'entity by key' => [RealSecondEntity::class, ['type' => 'custom']],
         ];
     }
 
     private function converter(): CompositeConverter
     {
+        $entityManager = EntityManagerFactory::create();
+
         return new CompositeConverter(
             new PrimitiveConverter(),
             new DateTimeConverter(),
             new EnumConverter(),
-            new EntityConverter(EntityManagerFactory::create()),
+            new EntityByKeyConverter($entityManager, 'custom', RealSecondEntity::class, 'id'),
+            new EntityConverter($entityManager),
             new ObjectConverter(),
         );
     }
