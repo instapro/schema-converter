@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Instapro\SchemaConverter\Test\Functional;
 
+use DateTime;
 use Instapro\SchemaConverter\CompositeConverter;
+use Instapro\SchemaConverter\DateTimeConverter;
 use Instapro\SchemaConverter\EntityConverter;
 use Instapro\SchemaConverter\ObjectConverter;
 use Instapro\SchemaConverter\PrimitiveConverter;
@@ -186,6 +188,7 @@ final class AllConvertersTest extends TestCase
                     ],
                 ],
             ],
+            'datetime' => [DateTime::class, ['type' => 'datetime']],
         ];
     }
 
@@ -193,6 +196,7 @@ final class AllConvertersTest extends TestCase
     {
         return new CompositeConverter(
             new PrimitiveConverter(),
+            new DateTimeConverter(),
             new EntityConverter(EntityManagerFactory::create()),
             new ObjectConverter(),
         );

@@ -114,6 +114,20 @@ echo json_encode($converter->toSchema(MyEntity::class)->toArray()); // {"type": 
 echo $converter->castValue(MyEntity::class, 123)->id; // 123   
 ```
 
+### `DateTimeConverter`
+
+The `DateTimeConverter` can handle objects that implement `DateTimeIterface`.
+
+```php
+$converter = new \Instapro\SchemaConverter\DateTimeConverter();
+
+echo json_encode($converter->toSchema(\DateTime::class)->toArray()); // {"type": "datetime"}
+echo PHP_EOL;
+
+$dateTime = $converter->castValue(\DateTime::class, '2021-01-01T00:00:00Z');
+echo $dateTime->format('Y-m-d'); // 2021-01-01
+```
+
 ### `CompositeConverter`
 
 There are several types of schemas that can be generated. For convenience, the library provides a `CompositeConverter` that can be used to convert multiple types of schemas.
@@ -121,6 +135,7 @@ There are several types of schemas that can be generated. For convenience, the l
 ```php
 $converter = new \Instapro\SchemaConverter\CompositeConverter(
     new \Instapro\SchemaConverter\PrimitiveConverter(),
+    new \Instapro\SchemaConverter\DateTimeConverter(),
     new \Instapro\SchemaConverter\ObjectConverter(),
     new \Instapro\SchemaConverter\EntityConverter($entityManager);
 );
