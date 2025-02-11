@@ -128,6 +128,20 @@ $dateTime = $converter->castValue(\DateTime::class, '2021-01-01T00:00:00Z');
 echo $dateTime->format('Y-m-d'); // 2021-01-01
 ```
 
+### `EnumConverter`
+
+The `EnumConverter` can handle PHP enumerations.
+
+```php
+$converter = new \Instapro\SchemaConverter\EnumConverter();
+
+echo json_encode($converter->toSchema(MyEnum::class)->toArray()); // {"type": "enum", "values": ["VALUE1", "VALUE2"]}
+echo PHP_EOL;
+
+$enum = $converter->castValue(MyEnum::class, 'VALUE1');
+echo $enum->getValue(); // VALUE1
+```
+
 ### `CompositeConverter`
 
 There are several types of schemas that can be generated. For convenience, the library provides a `CompositeConverter` that can be used to convert multiple types of schemas.

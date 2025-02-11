@@ -8,9 +8,12 @@ use DateTime;
 use Instapro\SchemaConverter\CompositeConverter;
 use Instapro\SchemaConverter\DateTimeConverter;
 use Instapro\SchemaConverter\EntityConverter;
+use Instapro\SchemaConverter\EnumConverter;
 use Instapro\SchemaConverter\ObjectConverter;
 use Instapro\SchemaConverter\PrimitiveConverter;
 use Instapro\SchemaConverter\Test\Fixtures\Entities\RealEntity;
+use Instapro\SchemaConverter\Test\Fixtures\Enums\Backed;
+use Instapro\SchemaConverter\Test\Fixtures\Enums\Basic;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\Level1;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\Level2;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithIntersectionType;
@@ -189,6 +192,14 @@ final class AllConvertersTest extends TestCase
                 ],
             ],
             'datetime' => [DateTime::class, ['type' => 'datetime']],
+            'basic enum' => [
+                Basic::class,
+                ['type' => 'enum', 'allowedValues' => ['First', 'Second', 'Third']],
+            ],
+            'backed enum' => [
+                Backed::class,
+                ['type' => 'enum', 'allowedValues' => ['First', 'Second', 'Third']],
+            ],
         ];
     }
 
@@ -197,6 +208,7 @@ final class AllConvertersTest extends TestCase
         return new CompositeConverter(
             new PrimitiveConverter(),
             new DateTimeConverter(),
+            new EnumConverter(),
             new EntityConverter(EntityManagerFactory::create()),
             new ObjectConverter(),
         );
