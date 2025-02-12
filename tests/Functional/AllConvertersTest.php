@@ -10,6 +10,7 @@ use Instapro\SchemaConverter\DateTimeConverter;
 use Instapro\SchemaConverter\EntityByKeyConverter;
 use Instapro\SchemaConverter\EntityConverter;
 use Instapro\SchemaConverter\EnumConverter;
+use Instapro\SchemaConverter\JsonArrayConverter;
 use Instapro\SchemaConverter\ObjectConverter;
 use Instapro\SchemaConverter\PrimitiveConverter;
 use Instapro\SchemaConverter\Test\Fixtures\Entities\RealEntity;
@@ -88,6 +89,7 @@ final class AllConvertersTest extends TestCase
             'object int' => ['int', ['type' => 'int']],
             'float' => ['float', ['type' => 'float']],
             'bool' => ['bool', ['type' => 'bool']],
+            'array' => ['array', ['type' => 'json']],
             'entity' => [RealEntity::class, ['type' => 'identifier']],
             'object without constructor' => [WithoutConstructor::class, ['type' => 'object']],
             'object without type' => [
@@ -184,6 +186,7 @@ final class AllConvertersTest extends TestCase
                 [
                     'type' => 'object',
                     'parameters' => [
+                        'array' => ['type' => 'json', 'required' => true],
                         'string' => ['type' => 'string', 'required' => true],
                         'int' => ['type' => 'int', 'required' => true],
                         'float' => ['type' => 'float', 'required' => true],
@@ -211,6 +214,7 @@ final class AllConvertersTest extends TestCase
         $entityManager = EntityManagerFactory::create();
 
         return new CompositeConverter(
+            new JsonArrayConverter(),
             new PrimitiveConverter(),
             new DateTimeConverter(),
             new EnumConverter(),

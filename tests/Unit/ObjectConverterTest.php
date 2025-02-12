@@ -121,6 +121,7 @@ final class ObjectConverterTest extends TestCase
             'with several types' => [
                 WithSeveralTypes::class,
                 new ObjectSchema(
+                    new ObjectParameter('array', new DummySchema('array'), true),
                     new ObjectParameter('string', new DummySchema('string'), true),
                     new ObjectParameter('int', new DummySchema('int'), true),
                     new ObjectParameter('float', new DummySchema('float'), true),
@@ -247,6 +248,7 @@ final class ObjectConverterTest extends TestCase
             'with several types' => [
                 WithSeveralTypes::class,
                 [
+                    'array' => [1, 2, 3],
                     'string' => 'string',
                     'int' => 42,
                     'float' => 1.2,
@@ -255,6 +257,7 @@ final class ObjectConverterTest extends TestCase
                     'null' => null,
                 ],
                 new WithSeveralTypes(
+                    array: [1, 2, 3],
                     string: 'string',
                     int: 42,
                     float: 1.2,

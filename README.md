@@ -162,6 +162,20 @@ $entity = $converter->castValue(MyPostalCodeEntity::class, '1017BS');
 echo $entity->postalCode; // 1017BS
 ```
 
+### `JsonArrayConverter`
+
+This converter handles JSON arrays.
+
+```php
+$converter = new \Instapro\SchemaConverter\JsonArrayConverter();
+
+echo json_encode($converter->toSchema('array')->toArray()); // {"type": "json"}
+echo PHP_EOL;
+
+$array = $converter->castValue('array', '[1, 2, 3]');
+print_r($array); // Array ( [0] => 1 [1] => 2 [2] => 3 )
+```
+
 ### `CompositeConverter`
 
 There are several types of schemas that can be generated. For convenience, the library provides a `CompositeConverter` that can be used to convert multiple types of schemas.
