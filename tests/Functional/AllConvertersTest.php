@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Instapro\SchemaConverter\Test\Functional;
 
 use Instapro\SchemaConverter\CompositeConverter;
+use Instapro\SchemaConverter\EntityConverter;
 use Instapro\SchemaConverter\ObjectConverter;
 use Instapro\SchemaConverter\PrimitiveConverter;
+use Instapro\SchemaConverter\Test\Fixtures\Entities\RealEntity;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\Level1;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\Level2;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithIntersectionType;
@@ -19,6 +21,7 @@ use Instapro\SchemaConverter\Test\Fixtures\Objects\WithoutType;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithSeveralTypes;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithUnionType;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithVariadicParameter;
+use Instapro\SchemaConverter\Test\TestFramework\EntityManagerFactory;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -78,6 +81,7 @@ final class AllConvertersTest extends TestCase
             'object int' => ['int', ['type' => 'int']],
             'float' => ['float', ['type' => 'float']],
             'bool' => ['bool', ['type' => 'bool']],
+            'entity' => [RealEntity::class, ['type' => 'identifier']],
             'object without constructor' => [WithoutConstructor::class, ['type' => 'object']],
             'object without type' => [
                 WithoutType::class,
@@ -189,6 +193,7 @@ final class AllConvertersTest extends TestCase
     {
         return new CompositeConverter(
             new PrimitiveConverter(),
+            new EntityConverter(EntityManagerFactory::create()),
             new ObjectConverter(),
         );
     }
