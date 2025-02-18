@@ -23,10 +23,16 @@ final class ObjectConverter implements Converter, CompositeBondConverter
     private Converter $converter;
 
     public function __construct(
-        private readonly ValueCaster $valueCaster = new ValueCaster\OptionalValueCaster(
-            new ValueCaster\StandardValueCaster(),
+        private readonly ValueCaster $valueCaster = new ValueCaster\NullVariadicValueCaster(
+            new ValueCaster\OptionalValueCaster(
+                new ValueCaster\VariadicValueCaster(
+                    new ValueCaster\StandardValueCaster(),
+                ),
+            ),
         ),
-        private readonly SchemaBuilder $schemaBuilder = new SchemaBuilder\StandardSchemaBuilder(),
+        private readonly SchemaBuilder $schemaBuilder = new SchemaBuilder\ListSchemaBuilder(
+            new SchemaBuilder\StandardSchemaBuilder(),
+        ),
     ) {
     }
 

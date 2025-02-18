@@ -16,6 +16,7 @@ use Instapro\SchemaConverter\Test\Fixtures\Objects\WithOptionalParameter;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithoutConstructor;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithoutType;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithSeveralTypes;
+use Instapro\SchemaConverter\Test\Fixtures\Objects\WithVariadicParameter;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -109,6 +110,19 @@ final class AllConvertersTest extends TestCase
                     'type' => 'object',
                     'parameters' => [
                         'parameter' => ['type' => 'int', 'required' => false],
+                    ],
+                ],
+            ],
+            'object with variadic parameter' => [
+                WithVariadicParameter::class,
+                [
+                    'type' => 'object',
+                    'parameters' => [
+                        'parameter' => [
+                            'type' => 'list',
+                            'items' => ['type' => 'string'],
+                            'required' => false,
+                        ],
                     ],
                 ],
             ],

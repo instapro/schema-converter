@@ -6,6 +6,7 @@ namespace Instapro\SchemaConverter\Test\Unit;
 
 use Instapro\SchemaConverter\ConverterException;
 use Instapro\SchemaConverter\ObjectConverter;
+use Instapro\SchemaConverter\Schemas\ListSchema;
 use Instapro\SchemaConverter\Schemas\ObjectParameter;
 use Instapro\SchemaConverter\Schemas\ObjectSchema;
 use Instapro\SchemaConverter\Schemas\SimpleSchema;
@@ -15,6 +16,7 @@ use Instapro\SchemaConverter\Test\Fixtures\Objects\WithOptionalParameter;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithoutConstructor;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithoutType;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithSeveralTypes;
+use Instapro\SchemaConverter\Test\Fixtures\Objects\WithVariadicParameter;
 use Instapro\SchemaConverter\Test\TestFramework\DummyConverter;
 use Instapro\SchemaConverter\Test\TestFramework\DummySchema;
 use Instapro\SchemaConverter\Test\TestFramework\Introspection\DummySchemaBuilder;
@@ -73,6 +75,12 @@ final class ObjectConverterTest extends TestCase
                         new DummySchema('int'),
                         false,
                     ),
+                ),
+            ],
+            'with variadic parameter' => [
+                WithVariadicParameter::class,
+                new ObjectSchema(
+                    new ObjectParameter('parameter', new ListSchema(new DummySchema('string')), false),
                 ),
             ],
             'with several types' => [
@@ -175,6 +183,16 @@ final class ObjectConverterTest extends TestCase
                 WithNullableParameter::class,
                 ['parameter' => 42],
                 new WithNullableParameter(42),
+            ],
+            'with variadic parameter/missing' => [
+                WithVariadicParameter::class,
+                [],
+                new WithVariadicParameter(),
+            ],
+            'with variadic parameter/filled' => [
+                WithVariadicParameter::class,
+                ['parameter' => ['value1', 'value2']],
+                new WithVariadicParameter('value1', 'value2'),
             ],
             'with several types' => [
                 WithSeveralTypes::class,
