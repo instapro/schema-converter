@@ -16,6 +16,7 @@ use Instapro\SchemaConverter\Test\Fixtures\Objects\WithOptionalParameter;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithoutConstructor;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithoutType;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithSeveralTypes;
+use Instapro\SchemaConverter\Test\Fixtures\Objects\WithUnionType;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithVariadicParameter;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -92,6 +93,30 @@ final class AllConvertersTest extends TestCase
                     'type' => 'object',
                     'parameters' => [
                         'parameter' => ['type' => 'bool', 'required' => true],
+                    ],
+                ],
+            ],
+            'object with union type' => [
+                WithUnionType::class,
+                [
+                    'type' => 'object',
+                    'parameters' => [
+                        'parameter1' => [
+                            'type' => 'oneOf',
+                            'options' => [
+                                ['type' => 'string'],
+                                ['type' => 'int'],
+                            ],
+                            'required' => true,
+                        ],
+                        'parameter2' => [
+                            'type' => 'oneOf',
+                            'options' => [
+                                ['type' => 'float'],
+                                ['type' => 'bool'],
+                            ],
+                            'required' => true,
+                        ],
                     ],
                 ],
             ],

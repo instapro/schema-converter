@@ -9,6 +9,7 @@ use Instapro\SchemaConverter\ObjectConverter;
 use Instapro\SchemaConverter\Schemas\ListSchema;
 use Instapro\SchemaConverter\Schemas\ObjectParameter;
 use Instapro\SchemaConverter\Schemas\ObjectSchema;
+use Instapro\SchemaConverter\Schemas\OneOfSchema;
 use Instapro\SchemaConverter\Schemas\SimpleSchema;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithNamedType;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithNullableParameter;
@@ -16,6 +17,7 @@ use Instapro\SchemaConverter\Test\Fixtures\Objects\WithOptionalParameter;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithoutConstructor;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithoutType;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithSeveralTypes;
+use Instapro\SchemaConverter\Test\Fixtures\Objects\WithUnionType;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithVariadicParameter;
 use Instapro\SchemaConverter\Test\TestFramework\DummyConverter;
 use Instapro\SchemaConverter\Test\TestFramework\DummySchema;
@@ -60,6 +62,21 @@ final class ObjectConverterTest extends TestCase
             'with type' => [
                 WithNamedType::class,
                 new ObjectSchema(new ObjectParameter('parameter', new DummySchema('bool'), true)),
+            ],
+            'with union type' => [
+                WithUnionType::class,
+                new ObjectSchema(
+                    new ObjectParameter(
+                        'parameter1',
+                        new OneOfSchema(new DummySchema('string'), new DummySchema('int')),
+                        true,
+                    ),
+                    new ObjectParameter(
+                        'parameter2',
+                        new OneOfSchema(new DummySchema('float'), new DummySchema('bool')),
+                        true,
+                    ),
+                ),
             ],
             'with optional parameter' => [
                 WithOptionalParameter::class,
@@ -158,6 +175,16 @@ final class ObjectConverterTest extends TestCase
                 WithNamedType::class,
                 ['parameter' => true],
                 new WithNamedType(true),
+            ],
+            'with parameter with union type/1' => [
+                WithUnionType::class,
+                ['parameter1' => 'string', 'parameter2' => 1.0],
+                new WithUnionType('string', 1.0),
+            ],
+            'with parameter with union type/2' => [
+                WithUnionType::class,
+                ['parameter1' => 42, 'parameter2' => false],
+                new WithUnionType(42, false),
             ],
             'with optional parameter/missing' => [
                 WithOptionalParameter::class,
