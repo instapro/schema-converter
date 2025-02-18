@@ -9,6 +9,7 @@ use Instapro\SchemaConverter\ObjectConverter;
 use Instapro\SchemaConverter\PrimitiveConverter;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\Level1;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\Level2;
+use Instapro\SchemaConverter\Test\Fixtures\Objects\WithIntersectionType;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithNamedType;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithNestedParameters;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithNullableParameter;
@@ -114,6 +115,22 @@ final class AllConvertersTest extends TestCase
                             'options' => [
                                 ['type' => 'float'],
                                 ['type' => 'bool'],
+                            ],
+                            'required' => true,
+                        ],
+                    ],
+                ],
+            ],
+            'object with intersection type' => [
+                WithIntersectionType::class,
+                [
+                    'type' => 'object',
+                    'parameters' => [
+                        'parameter' => [
+                            'type' => 'allOf',
+                            'options' => [
+                                ['type' => 'object'],
+                                ['type' => 'object'],
                             ],
                             'required' => true,
                         ],

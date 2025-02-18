@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace Instapro\SchemaConverter\Test\Unit;
 
+use ArrayIterator;
+use Countable;
 use Instapro\SchemaConverter\ConverterException;
 use Instapro\SchemaConverter\ObjectConverter;
+use Instapro\SchemaConverter\Schemas\AllOfSchema;
 use Instapro\SchemaConverter\Schemas\ListSchema;
 use Instapro\SchemaConverter\Schemas\ObjectParameter;
 use Instapro\SchemaConverter\Schemas\ObjectSchema;
 use Instapro\SchemaConverter\Schemas\OneOfSchema;
 use Instapro\SchemaConverter\Schemas\SimpleSchema;
+use Instapro\SchemaConverter\Test\Fixtures\Objects\WithIntersectionType;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithNamedType;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithNullableParameter;
 use Instapro\SchemaConverter\Test\Fixtures\Objects\WithOptionalParameter;
@@ -23,6 +27,7 @@ use Instapro\SchemaConverter\Test\TestFramework\DummyConverter;
 use Instapro\SchemaConverter\Test\TestFramework\DummySchema;
 use Instapro\SchemaConverter\Test\TestFramework\Introspection\DummySchemaBuilder;
 use Instapro\SchemaConverter\Test\TestFramework\Introspection\DummyValueCaster;
+use Iterator;
 use LogicException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -74,6 +79,19 @@ final class ObjectConverterTest extends TestCase
                     new ObjectParameter(
                         'parameter2',
                         new OneOfSchema(new DummySchema('float'), new DummySchema('bool')),
+                        true,
+                    ),
+                ),
+            ],
+            'with intersection type' => [
+                WithIntersectionType::class,
+                new ObjectSchema(
+                    new ObjectParameter(
+                        'parameter',
+                        new AllOfSchema(
+                            new DummySchema(Iterator::class),
+                            new DummySchema(Countable::class),
+                        ),
                         true,
                     ),
                 ),
@@ -185,6 +203,11 @@ final class ObjectConverterTest extends TestCase
                 WithUnionType::class,
                 ['parameter1' => 42, 'parameter2' => false],
                 new WithUnionType(42, false),
+            ],
+            'with parameter with intersection type' => [
+                WithIntersectionType::class,
+                ['parameter' => new ArrayIterator([])],
+                new WithIntersectionType(new ArrayIterator([])),
             ],
             'with optional parameter/missing' => [
                 WithOptionalParameter::class,

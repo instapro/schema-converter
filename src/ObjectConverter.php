@@ -26,15 +26,19 @@ final class ObjectConverter implements Converter, CompositeBondConverter
         private readonly ValueCaster $valueCaster = new ValueCaster\NullVariadicValueCaster(
             new ValueCaster\OptionalValueCaster(
                 new ValueCaster\UnionTypeValueCaster(
-                    new ValueCaster\VariadicValueCaster(
-                        new ValueCaster\StandardValueCaster(),
+                    new ValueCaster\IntersectionTypeValueCaster(
+                        new ValueCaster\VariadicValueCaster(
+                            new ValueCaster\StandardValueCaster(),
+                        ),
                     ),
                 ),
             ),
         ),
         private readonly SchemaBuilder $schemaBuilder = new SchemaBuilder\OneOfSchemaBuilder(
-            new SchemaBuilder\ListSchemaBuilder(
-                new SchemaBuilder\StandardSchemaBuilder(),
+            new SchemaBuilder\AllOfSchemaBuilder(
+                new SchemaBuilder\ListSchemaBuilder(
+                    new SchemaBuilder\StandardSchemaBuilder(),
+                ),
             ),
         ),
     ) {
